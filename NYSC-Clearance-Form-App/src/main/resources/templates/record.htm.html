@@ -1,0 +1,87 @@
+<!-- src/main/resources/templates/records.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Clearance Records</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            padding: 20px;
+            background: #f9f9f9;
+        }
+
+        h2 {
+            margin-bottom: 10px;
+        }
+
+        form {
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+
+        th, td {
+            padding: 10px;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        input[type="text"] {
+            padding: 8px;
+            width: 250px;
+        }
+
+        button {
+            padding: 8px 15px;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Submitted Clearance Records</h2>
+
+<form method="get" th:action="@{/records/search}">
+    <input type="text" name="keyword" placeholder="Search by name or email" />
+    <button type="submit">Search</button>
+</form>
+
+<table>
+    <thead>
+    <tr>
+        <th>Corps Member Name</th>
+        <th>State Code</th>
+        <th>Department</th>
+        <th>Supervisor Signature</th>
+        <th>HOD Signature</th>
+        <th>Date Submitted</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="form : ${forms}">
+        <td th:text="${form.corpsName}"></td>
+        <td th:text="${form.stateCode}"></td>
+        <td th:text="${form.department}"></td>
+        <td>
+            <img th:src="@{'/uploads/' + ${form.supervisorSignaturePath}}" alt="Supervisor Sig" width="100"/>
+        </td>
+        <td>
+            <img th:src="@{'/uploads/' + ${form.hodSignaturePath}}" alt="HOD Sig" width="100"/>
+        </td>
+        <td th:text="${form.createdAt}"></td>
+    </tr>
+    </tbody>
+</table>
+
+
+</body>
+</html>

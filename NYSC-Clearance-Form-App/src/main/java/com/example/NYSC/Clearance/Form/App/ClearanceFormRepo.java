@@ -8,5 +8,5 @@ import java.util.List;
 
 @Repository
 public interface ClearanceFormRepo extends JpaRepository<ClearanceForm, Long> {
-    List<ClearanceForm> findByFullNameContainingIgnoreCaseOrEmailContainingIgnoreCase(String keyword, String keyword1);
+    List<ClearanceForm> findByFullNameContainingIgnoreCaseOrEmailContainingIgnoreCase(String name);
 }
