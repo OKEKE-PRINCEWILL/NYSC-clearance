@@ -8,7 +8,6 @@
 <body class="container mt-4">
 <h2 class="text-center mb-4">NYSC Internal Monthly Clearance Form</h2>
 
-<!-- Bind the form to your model object -->
 <form th:action="@{/submit}" th:object="${clearanceForm}" method="post" enctype="multipart/form-data" class="row g-3">
 
     <h5>Corps Member Details</h5>
@@ -32,7 +31,7 @@
     </div>
     <div class="col-md-6">
         <label for="conductRemark">Conduct Remark</label>
-        <input type="text" th:field="*{conductRemark}" class="form-control" id="conductRemark" required>
+        <textarea th:field="*{conductRemark}" class="form-control" id="conductRemark" rows="3" required></textarea>
     </div>
     <div class="col-md-4">
         <label for="supervisorName">Supervisor Name</label>
@@ -40,7 +39,7 @@
     </div>
     <div class="col-md-6">
         <label for="supervisorSignature">Supervisor Signature</label>
-        <input type="file" name="supervisorSignature" class="form-control" id="supervisorSignature" required>
+        <input type="file" name="supervisorSignature" class="form-control" id="supervisorSignature" accept="image/*" required>
     </div>
     <div class="col-md-3">
         <label for="supervisorDate">Supervisor Date</label>
@@ -50,7 +49,7 @@
     <h5 class="mt-4">HOD Section</h5>
     <div class="col-md-6">
         <label for="hodRemark">HOD Remark</label>
-        <input type="text" th:field="*{hodRemark}" class="form-control" id="hodRemark" required>
+        <textarea th:field="*{hodRemark}" class="form-control" id="hodRemark" rows="3" required></textarea>
     </div>
     <div class="col-md-4">
         <label for="hodName">HOD Name</label>
@@ -58,7 +57,7 @@
     </div>
     <div class="col-md-6">
         <label for="hodSignature">HOD Signature</label>
-        <input type="file" name="hodSignature" class="form-control" id="hodSignature" required>
+        <input type="file" name="hodSignature" class="form-control" id="hodSignature" accept="image/*" required>
     </div>
     <div class="col-md-3">
         <label for="hodDate">HOD Date</label>
@@ -67,3 +66,9 @@
 
     <div class="col-12 mt-4 text-center">
         <button type="submit" class="btn btn-success px-5">Submit</button>
+        <a href="/records" class="btn btn-info px-5 ms-3">View Records</a>
+    </div>
+</form>
+
+</body>
+</html>

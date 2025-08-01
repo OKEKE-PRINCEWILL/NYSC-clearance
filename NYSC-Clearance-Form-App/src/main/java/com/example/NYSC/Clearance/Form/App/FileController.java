@@ -19,9 +19,16 @@ public class FileController {
             Path file = Paths.get(uploadDir).resolve(filename);
             Resource resource = new UrlResource(file.toUri());
 
-            if (resource.exists() || resource.isReadable()) {
+            if (resource.exists() && resource.isReadable()) {
+                // Determine content type based on file extension
+                String contentType = Files.probeContentType(file);
+                if (contentType == null) {
+                    contentType = "application/octet-stream";
+                }
+
                 return ResponseEntity.ok()
-                        .contentType(MediaType.IMAGE_PNG)
+                        .contentType(MediaType.parseMediaType(contentType))
+                        .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + filename + "\"")
                         .body(resource);
             } else {
                 return ResponseEntity.notFound().build();
@@ -32,4 +39,3 @@ public class FileController {
         }
     }
 }
-

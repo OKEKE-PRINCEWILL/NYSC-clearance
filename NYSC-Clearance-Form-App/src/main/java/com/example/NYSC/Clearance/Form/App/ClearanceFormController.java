@@ -9,6 +9,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -18,65 +20,63 @@ public class ClearanceFormController {
 
     private final ClearanceFormService service;
 
-    // Directory to save uploaded signature files (configured in application.properties)
     @Value("${file.upload-dir}")
     private String uploadDir;
 
-    //This Is To Show The Main Form
     @GetMapping("/")
     public String showForm(Model model) {
-        model.addAttribute("form", new ClearanceForm());
-        return "form"; // Load form.html
+        // Fixed: Use "clearanceForm" to match the HTML template
+        model.addAttribute("clearanceForm", new ClearanceForm());
+        return "form";
     }
 
-    //This Will Handle My Form Submission
     @PostMapping("/submit")
-    public String submitForm(@ModelAttribute ClearanceForm form,
+    public String submitForm(@ModelAttribute ClearanceForm clearanceForm,
                              @RequestParam("supervisorSignature") MultipartFile supervisorSig,
                              @RequestParam("hodSignature") MultipartFile hodSig) throws IOException {
 
-        // THis Is To Save Supervisor Signature
+        // Create upload directory if it doesn't exist
+        Files.createDirectories(Paths.get(uploadDir));
+
+        // Save Supervisor Signature
         if (!supervisorSig.isEmpty()) {
             String filename = System.currentTimeMillis() + "_" + supervisorSig.getOriginalFilename();
             File dest = new File(uploadDir, filename);
             supervisorSig.transferTo(dest);
-            form.setSupervisorSignaturePath(filename);
+            clearanceForm.setSupervisorSignaturePath(filename);
         }
 
-        // This Is To Save HOD Signature
+        // Save HOD Signature
         if (!hodSig.isEmpty()) {
             String filename = System.currentTimeMillis() + "_" + hodSig.getOriginalFilename();
             File dest = new File(uploadDir, filename);
             hodSig.transferTo(dest);
-            form.setHodSignaturePath(filename);
+            clearanceForm.setHodSignaturePath(filename);
         }
 
-        //This is To Save form data to database
-        form.setCreatedAt(LocalDate.now());
-        service.saveForm(form);
+        // Save form data to database
+        clearanceForm.setCreatedAt(LocalDate.now());
+        service.saveForm(clearanceForm);
 
-        return "redirect:/success"; // Redirect to success.html
+        return "redirect:/success";
     }
 
-    // Success Page
     @GetMapping("/success")
     public String successPage() {
         return "success";
     }
 
-    //Admin View All Records
     @GetMapping("/records")
     public String viewRecords(Model model) {
         List<ClearanceForm> forms = service.getAllForms();
         model.addAttribute("forms", forms);
-        return "records"; // Load records.html
+        return "records";
     }
 
-    // Admin Search Records
     @GetMapping("/records/search")
     public String searchRecords(@RequestParam("keyword") String keyword, Model model) {
         List<ClearanceForm> results = service.searchForms(keyword);
         model.addAttribute("forms", results);
-        return "records"; // Show filtered results in same records.html
+        return "records";
     }
 }

@@ -9,23 +9,18 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ClearanceFormService {
 
-
     private final ClearanceFormRepo repository;
-
-
 
     public ClearanceForm saveForm(ClearanceForm form) {
         return repository.save(form);
     }
 
-    // Get All Saved Forms Class
-
     public List<ClearanceForm> getAllForms() {
         return repository.findAll();
     }
 
-    //Search Forms by Name or Email
+    // Fixed search method
     public List<ClearanceForm> searchForms(String keyword) {
-        return repository.findByFullNameContainingIgnoreCaseOrEmailContainingIgnoreCase(keyword);
+        return repository.searchByKeyword(keyword);
     }
 }
